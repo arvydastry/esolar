@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>eSolar – Saulės elektrinės be galvos skausmo</title>
+<meta name="description" content="Naujo esolar.lt dizaino kryptis (WordPress + WooCommerce, XStore). Demo versija.">
+<link rel="icon" href="assets/esolar/web/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B0E12;--ink-2:#13171C;--ink-3:#1B2128;
+  --paper:#F5F2EB;--paper-2:#ECE8DE;--paper-3:#DFD9CB;
+  --sun:#FFC83A;--sun-2:#FFD86B;--sun-deep:#E3A600;
+  --txt:#F3F1EC;--muted:rgba(243,241,236,.62);
+  --dark-txt:#0B0E12;--dark-muted:rgba(11,14,18,.6);
+  --line:rgba(255,255,255,.12);--line-dark:rgba(11,14,18,.12);
+  --r:20px;--r-lg:28px;
+  --font-d:"Bricolage Grotesque",system-ui,sans-serif;--font-b:"Manrope",system-ui,sans-serif;
+  --container:1360px;--gutter:clamp(20px,4vw,48px);
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:auto;-webkit-text-size-adjust:100%}
+body{font-family:var(--font-b);background:var(--ink);color:var(--txt);line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img,video,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+h1,h2,h3,h4{font-family:var(--font-d);letter-spacing:-.02em;line-height:1.08;font-weight:600}
+.wrap{width:min(var(--container),100% - 2*var(--gutter));margin-inline:auto}
+section{position:relative}
+.s-dark{background:var(--ink);color:var(--txt)}
+.s-paper{background:var(--paper);color:var(--dark-txt)}
+.sec{padding-block:clamp(72px,9vw,128px)}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font:600 .78rem/1 var(--font-b);letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+.eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--sun);box-shadow:0 0 0 4px rgba(255,200,58,.2)}
+.h2{font-size:clamp(2.1rem,4.6vw,3.9rem);margin:18px 0 14px;max-width:18ch}
+.lead{font-size:clamp(1rem,1.3vw,1.18rem);line-height:1.6;max-width:60ch}
+.s-dark .lead{color:var(--muted)}.s-paper .lead{color:var(--dark-muted)}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:10px;height:56px;padding:0 26px;border-radius:999px;font:600 1rem/1 var(--font-b);transition:transform .45s var(--ease),background .3s,color .3s,box-shadow .45s;white-space:nowrap;will-change:transform}
+.btn svg{width:18px;height:18px;transition:transform .45s var(--ease)}
+.btn:hover svg{transform:translateX(4px)}
+.btn-sun{background:var(--sun);color:var(--ink);box-shadow:0 10px 30px -12px rgba(255,200,58,.6)}
+.btn-sun:hover{background:var(--sun-2);box-shadow:0 18px 40px -14px rgba(255,200,58,.7)}
+.btn-ghost{border:1px solid rgba(255,255,255,.28);color:#fff;backdrop-filter:blur(10px);background:rgba(255,255,255,.04)}
+.btn-ghost:hover{background:rgba(255,255,255,.1)}
+.btn-ink{background:var(--ink);color:#fff}
+.btn-ink:hover{background:#1f262e}
+.btn-sm{height:46px;padding:0 20px;font-size:.92rem}
+.link{display:inline-flex;align-items:center;gap:8px;font-weight:600}
+.link svg{width:16px;height:16px;transition:transform .35s var(--ease)}
+.link:hover svg{transform:translateX(4px)}
+
+/* progress + header */
+.progress{position:fixed;top:0;left:0;height:3px;width:100%;background:var(--sun);transform-origin:left;transform:scaleX(0);z-index:60;pointer-events:none}
+.hdr{position:fixed;inset:0 0 auto 0;z-index:50;height:78px;display:flex;align-items:center;border-bottom:1px solid transparent;transition:background .45s,border-color .45s,backdrop-filter .45s}
+.hdr.is-scrolled{background:rgba(11,14,18,.72);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);border-color:var(--line)}
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font:700 1.45rem/1 var(--font-d);letter-spacing:-.03em;color:#fff}
+.brand img{width:42px;height:42px}
+.brand small{font:500 .7rem var(--font-b);letter-spacing:.12em;text-transform:uppercase;opacity:.6;margin-left:-4px;align-self:flex-end;margin-bottom:6px}
+.nav{display:flex;gap:2px}
+.nav a{padding:10px 14px;border-radius:999px;color:rgba(255,255,255,.8);font-weight:500;font-size:.95rem;transition:.25s}
+.nav a:hover{color:#fff;background:rgba(255,255,255,.08)}
+.hdr-right{display:flex;align-items:center;gap:10px}
+.phone{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:.95rem;color:#fff;padding:0 10px}
+.phone svg{width:16px;height:16px;color:var(--sun)}
+.icon-btn{position:relative;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.22);display:grid;place-items:center;color:#fff;transition:.3s}
+.icon-btn:hover{background:rgba(255,255,255,.1)}
+.icon-btn svg{width:20px;height:20px}
+.icon-btn b{position:absolute;top:-3px;right:-3px;background:var(--sun);color:var(--ink);font:700 11px/1 var(--font-b);width:19px;height:19px;border-radius:50%;display:grid;place-items:center}
+.burger{display:none}
+.burger span{display:block;width:20px;height:2px;background:#fff;transition:.3s}
+.burger span+span{margin-top:5px}
+.menu{position:fixed;inset:0;background:var(--ink);z-index:45;display:flex;flex-direction:column;justify-content:center;padding:100px var(--gutter) 40px;transform:translateY(-100%);transition:transform .6s var(--ease);visibility:hidden}
+.menu a{font:600 clamp(2rem,8vw,3.2rem)/1.15 var(--font-d);letter-spacing:-.03em;padding:6px 0;transform:translateY(20px);opacity:0;transition:.5s var(--ease)}
+.menu .m-foot{margin-top:auto;color:var(--muted);font-size:.95rem;display:flex;flex-direction:column;gap:6px}
+body.menu-open .menu{transform:none;visibility:visible}
+body.menu-open .menu a{transform:none;opacity:1}
+body.menu-open .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+body.menu-open .burger span:nth-child(2){opacity:0}
+body.menu-open .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.brand{flex:none;white-space:nowrap}
+@media(max-width:1100px){.nav,.phone{display:none}.burger{display:block;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.22);display:grid;place-content:center}}
+@media(max-width:600px){.hdr .btn{display:none}.hdr-right{gap:8px}}
+
+/* hero */
+.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;color:#fff}
+.hero-media{position:absolute;inset:0;background:#0b0e12}
+.hero-media video,.hero-media img{width:100%;height:100%;object-fit:cover;animation:kb 26s ease-in-out infinite alternate}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.1)}}
+.hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,14,18,.42) 0%,rgba(11,14,18,.12) 38%,rgba(11,14,18,.9) 100%),radial-gradient(55% 45% at 85% 92%,rgba(255,200,58,.2),transparent 70%)}
+.hero .wrap{position:relative;padding-top:150px;padding-bottom:clamp(36px,5vw,64px);display:grid;grid-template-columns:1.35fr .85fr;gap:40px;align-items:end}
+.hero h1{font-size:clamp(2.9rem,7.2vw,6.6rem);font-weight:700;line-height:.95;letter-spacing:-.04em;margin:22px 0 26px}
+.hero h1 em{font-style:normal;color:var(--sun)}
+.line{display:block;overflow:hidden;padding-bottom:.08em;margin-bottom:-.08em}
+.line-in{display:block;will-change:transform}
+.hero p{max-width:54ch;font-size:clamp(1.02rem,1.35vw,1.22rem);color:rgba(255,255,255,.82);line-height:1.6}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
+.hero-stats{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:var(--r-lg);padding:26px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;justify-self:end;width:100%;max-width:520px}
+.stat b{display:block;font:700 clamp(1.9rem,3vw,2.7rem)/1 var(--font-d);letter-spacing:-.03em;color:#fff}
+.stat b i{font-style:normal;color:var(--sun)}
+.stat span{display:block;margin-top:8px;font-size:.82rem;color:rgba(255,255,255,.65);line-height:1.35}
+.stat+.stat{border-left:1px solid rgba(255,255,255,.12);padding-left:18px}
+.hero-foot{position:relative;display:flex;align-items:center;justify-content:space-between;gap:20px;grid-column:1/-1;padding-top:26px;border-top:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.7);font-size:.88rem}
+.badge{position:relative;width:110px;height:110px;flex:none}
+.badge svg{width:100%;height:100%;animation:spin 16s linear infinite}
+.badge text{font:600 10.5px var(--font-b);letter-spacing:.22em;fill:#fff;text-transform:uppercase}
+.badge .arrow{position:absolute;inset:0;display:grid;place-items:center;color:var(--sun);animation:bob 2s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes bob{0%,100%{transform:translateY(-3px)}50%{transform:translateY(4px)}}
+.hero-foot .chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip-o{border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:8px 14px;font-weight:500;background:rgba(255,255,255,.04)}
+@media(max-width:900px){.hero .wrap{grid-template-columns:1fr;padding-top:120px}.hero-stats{max-width:none;padding:20px;gap:12px}.stat+.stat{padding-left:12px}.badge{width:84px;height:84px}.hero-foot .chips{display:none}}
+
+/* marquee */
+.marquee{background:var(--sun);color:var(--ink);overflow:hidden;padding:18px 0;position:relative;z-index:2}
+.marquee-track{display:flex;width:max-content;animation:marquee 38s linear infinite}
+.marquee span{display:flex;align-items:center;gap:26px;padding:0 24px;font:600 1.05rem/1 var(--font-d);letter-spacing:-.01em;white-space:nowrap}
+.marquee span::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--ink);opacity:.35}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* services */
+.svc-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;position:relative;margin-top:64px}
+.rail{position:absolute;left:0;right:0;top:-28px;height:2px;background:var(--line)}
+.rail i{display:block;height:100%;background:var(--sun);transform-origin:left;transform:scaleX(0)}
+.svc{background:var(--ink-2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:transform .6s var(--ease),border-color .35s,box-shadow .6s}
+.svc:hover{transform:translateY(-8px);border-color:rgba(255,200,58,.55);box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+.svc .media{aspect-ratio:16/11;overflow:hidden;position:relative;background:var(--ink-3)}
+.svc .media :is(video,img){width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.svc:hover .media :is(video,img){transform:scale(1.07)}
+.svc .num{position:absolute;top:12px;left:12px;background:var(--sun);color:var(--ink);font:700 .78rem/1 var(--font-d);padding:8px 11px;border-radius:999px}
+.svc .body{padding:22px 20px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
+.svc h3{font-size:1.18rem;line-height:1.25}
+.svc p{color:var(--muted);font-size:.92rem;line-height:1.55;flex:1}
+.svc .link{color:var(--sun);font-size:.9rem;margin-top:6px}
+@media(max-width:1100px){.svc-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding-bottom:12px;scrollbar-width:none;margin-inline:calc(-1*var(--gutter));padding-inline:var(--gutter)}.svc-grid::-webkit-scrollbar{display:none}.svc{flex:0 0 min(78vw,340px);scroll-snap-align:start}.rail{left:var(--gutter);right:var(--gutter)}}
+
+/* bento */
+.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:56px}
+.tile{border-radius:var(--r-lg);padding:28px;position:relative;overflow:hidden;background:#fff;border:1px solid var(--line-dark);display:flex;flex-direction:column;min-height:230px;transition:transform .6s var(--ease),box-shadow .6s}
+.tile:hover{transform:translateY(-5px);box-shadow:0 30px 60px -36px rgba(11,14,18,.5)}
+.tile h3{font-size:1.3rem;margin-top:auto}
+.tile p{color:var(--dark-muted);font-size:.95rem;line-height:1.55;margin-top:8px}
+.tile .ic{width:48px;height:48px;border-radius:14px;background:var(--paper-2);display:grid;place-items:center;color:var(--ink)}
+.tile .ic svg{width:22px;height:22px}
+.t-video{grid-column:span 7;grid-row:span 2;background:var(--ink);color:#fff;min-height:480px;padding:0;border:0}
+.t-video video,.t-video img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.t-video .inner{position:absolute;inset:auto 0 0 0;padding:32px;background:linear-gradient(transparent,rgba(11,14,18,.92))}
+.t-video h3{font-size:clamp(1.5rem,2.4vw,2.1rem);color:#fff}
+.t-video p{color:rgba(255,255,255,.75);max-width:48ch}
+.t-sun{grid-column:span 5;background:var(--sun);border:0}
+.t-sun .big{font:700 clamp(3.4rem,6vw,5.6rem)/1 var(--font-d);letter-spacing:-.04em}
+.t-sun .big small{font-size:.45em;letter-spacing:-.02em}
+.t-ring{grid-column:span 5;flex-direction:row;align-items:center;gap:22px}
+.t-ring .ring{flex:none;width:118px;height:118px;position:relative}
+.t-ring .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.t-ring .ring b{position:absolute;inset:0;display:grid;place-items:center;font:700 1.35rem/1 var(--font-d);letter-spacing:-.03em}
+.t-ring h3{margin-top:0}
+.t-s{grid-column:span 4}
+@media(max-width:1000px){.t-video,.t-sun,.t-ring{grid-column:span 12}.t-s{grid-column:span 6}}
+@media(max-width:600px){.t-s{grid-column:span 12}.t-video{min-height:380px}}
+
+/* calculator */
+.calc{overflow:hidden}
+.rays{position:absolute;right:-18%;top:-40%;width:min(80vw,900px);aspect-ratio:1;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(255,200,58,.14) 0 3deg,transparent 3deg 14deg);-webkit-mask:radial-gradient(circle,#000 0,transparent 68%);mask:radial-gradient(circle,#000 0,transparent 68%);animation:spin 120s linear infinite;pointer-events:none}
+.calc .grid{position:relative;display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(32px,6vw,80px);align-items:start}
+.ctl{margin-top:36px;background:var(--ink-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:26px}
+.ctl label{display:flex;justify-content:space-between;align-items:baseline;font-weight:600;margin-bottom:14px}
+.ctl label output{font:700 1.5rem/1 var(--font-d);color:var(--sun);letter-spacing:-.02em}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:6px;border-radius:999px;background:linear-gradient(90deg,var(--sun) var(--p,20%),rgba(255,255,255,.14) var(--p,20%));outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;border:6px solid var(--sun);box-shadow:0 6px 20px rgba(0,0,0,.4);cursor:grab}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:6px solid var(--sun);cursor:grab}
+.ctl .hint{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-top:10px}
+.seg{display:flex;gap:6px;background:rgba(255,255,255,.06);padding:5px;border-radius:999px;margin-top:22px;width:max-content}
+.seg button{padding:10px 18px;border-radius:999px;font-weight:600;font-size:.9rem;color:var(--muted);transition:.3s}
+.seg button.on{background:var(--sun);color:var(--ink)}
+.results{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.res{background:var(--ink-2);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;transition:border-color .3s}
+.res.flash{border-color:rgba(255,200,58,.6)}
+.res b{display:block;font:700 clamp(1.7rem,2.6vw,2.4rem)/1 var(--font-d);letter-spacing:-.03em;color:#fff}
+.res b i{font-style:normal;color:var(--sun);font-size:.6em;margin-left:4px}
+.res span{display:block;margin-top:8px;font-size:.85rem;color:var(--muted)}
+.res.hi{background:var(--sun);color:var(--ink);border-color:var(--sun);grid-column:span 2}
+.res.hi b,.res.hi b i{color:var(--ink)}
+.res.hi span{color:rgba(11,14,18,.7)}
+.panels{display:grid;grid-template-columns:repeat(16,1fr);gap:4px;margin-top:14px}
+.panels i{aspect-ratio:1.55;border-radius:2px;background:linear-gradient(135deg,#2a3a4d,#111a24);border:1px solid rgba(255,200,58,.45);animation:pop .45s var(--ease) both}
+@keyframes pop{from{transform:scale(.3);opacity:0}}
+.panels-note{font-size:.8rem;color:var(--muted);margin-top:10px}
+.calc .fine{font-size:.78rem;color:var(--muted);margin-top:18px;max-width:60ch}
+@media(max-width:900px){.calc .grid{grid-template-columns:1fr}.panels{grid-template-columns:repeat(12,1fr)}}
+
+/* shop */
+.shop-track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 0 16px;scrollbar-width:none;cursor:grab;margin-top:44px}
+.shop-track::-webkit-scrollbar{display:none}
+.shop-track.drag{cursor:grabbing;scroll-snap-type:none}
+.prod{flex:0 0 clamp(262px,23vw,318px);scroll-snap-align:start;background:#fff;border:1px solid var(--line-dark);border-radius:var(--r-lg);overflow:hidden;transition:transform .6s var(--ease),box-shadow .6s;user-select:none}
+.prod:hover{transform:translateY(-6px);box-shadow:0 34px 60px -34px rgba(11,14,18,.45)}
+.prod .img{aspect-ratio:1/.92;overflow:hidden;background:var(--paper-2);position:relative}
+.prod img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease);pointer-events:none}
+.prod:hover img{transform:scale(1.07)}
+.prod .tag{position:absolute;top:12px;left:12px;background:var(--ink);color:#fff;font:600 .7rem/1 var(--font-b);letter-spacing:.06em;text-transform:uppercase;padding:8px 10px;border-radius:999px}
+.prod .tag.sun{background:var(--sun);color:var(--ink)}
+.prod .pb{padding:18px 18px 20px}
+.chip{font:700 .7rem/1 var(--font-b);letter-spacing:.1em;text-transform:uppercase;color:var(--dark-muted)}
+.prod h3{font-size:1.1rem;line-height:1.25;margin:8px 0 6px}
+.specs{font-size:.84rem;color:var(--dark-muted);line-height:1.5}
+.price-row{display:flex;justify-content:space-between;align-items:end;margin-top:16px}
+.price{font:700 1.3rem/1 var(--font-d);letter-spacing:-.02em}
+.price small{display:block;font:500 .74rem var(--font-b);color:var(--dark-muted);margin-bottom:5px;letter-spacing:0}
+.add{width:46px;height:46px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;transition:.35s}
+.add svg{width:20px;height:20px}
+.prod:hover .add{background:var(--sun);color:var(--ink);transform:rotate(90deg)}
+.shop-nav{display:flex;gap:8px}
+.shop-nav button{width:50px;height:50px;border-radius:50%;border:1px solid var(--line-dark);display:grid;place-items:center;transition:.3s}
+.shop-nav button:hover{background:var(--ink);color:#fff}
+.shop-nav svg{width:18px;height:18px}
+.demo-note{font-size:.78rem;color:var(--dark-muted);margin-top:10px}
+
+/* works */
+.works{overflow:hidden}
+.works-inner{display:flex;flex-direction:column;justify-content:center;min-height:100svh;padding:104px 0 32px}
+.works-track{display:flex;gap:16px;width:max-content;padding:36px var(--gutter) 0;will-change:transform}
+.work{position:relative;flex:none;height:min(46vh,520px);aspect-ratio:16/10;border-radius:var(--r-lg);overflow:hidden;background:var(--ink-3)}
+.work :is(img,video){width:100%;height:100%;object-fit:cover}
+.work figcaption{position:absolute;left:18px;bottom:18px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.work .tag{background:rgba(11,14,18,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);padding:10px 14px;border-radius:999px;font-weight:600;font-size:.88rem;color:#fff}
+.work .tag.sun{background:var(--sun);color:var(--ink);border-color:var(--sun)}
+.work.cta-card{display:grid;place-items:center;background:var(--sun);color:var(--ink);aspect-ratio:1/1;text-align:center;padding:32px}
+.work.cta-card h3{font-size:clamp(1.6rem,2.6vw,2.4rem);margin-bottom:18px}
+@media(max-width:899px){.works-inner{min-height:0}.works-track{width:auto;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:none}.works-track::-webkit-scrollbar{display:none}.work{height:auto;width:82vw;aspect-ratio:16/11;scroll-snap-align:start}.work.cta-card{width:70vw;aspect-ratio:1/1}}
+
+/* about */
+.about .grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(36px,7vw,110px);align-items:center}
+.about-media{position:relative;padding-bottom:9%}
+.about-media .main{border-radius:var(--r-lg);overflow:hidden;aspect-ratio:4/4.5;margin-right:12%}
+.about-media .main img{width:100%;height:118%;object-fit:cover;margin-top:-9%}
+.about-media .float{position:absolute;right:0;bottom:0;width:36%;aspect-ratio:9/16;border-radius:22px;overflow:hidden;border:6px solid var(--paper);box-shadow:0 40px 70px -24px rgba(11,14,18,.5);background:var(--ink)}
+.about-media .float video{width:100%;height:100%;object-fit:cover}
+.about-media .float .lbl{position:absolute;left:12px;bottom:12px;background:rgba(11,14,18,.6);color:#fff;font-size:.72rem;font-weight:600;padding:6px 10px;border-radius:999px;backdrop-filter:blur(8px)}
+.about .vals{display:grid;gap:14px;margin-top:28px}
+.val{display:flex;gap:14px;align-items:flex-start}
+.val .dot{flex:none;width:34px;height:34px;border-radius:50%;background:var(--sun);display:grid;place-items:center;color:var(--ink)}
+.val .dot svg{width:16px;height:16px}
+.val b{display:block;font-family:var(--font-d);font-size:1.05rem}
+.val p{color:var(--dark-muted);font-size:.95rem}
+.about .stats{display:flex;gap:28px;margin-top:34px;padding-top:28px;border-top:1px solid var(--line-dark)}
+.about .stat b{color:var(--ink)}
+.about .stat span{color:var(--dark-muted)}
+.about .stat+.stat{border-color:var(--line-dark)}
+@media(max-width:900px){.about .grid{grid-template-columns:1fr}.about-media{margin-bottom:10px}}
+
+/* faq */
+.faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(32px,6vw,90px);margin-top:10px}
+.faq{border-top:1px solid var(--line)}
+.q{border-bottom:1px solid var(--line)}
+.q button{width:100%;display:flex;justify-content:space-between;gap:20px;padding:22px 0;text-align:left;font:600 1.12rem/1.3 var(--font-d);letter-spacing:-.01em}
+.q .plus{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;flex:none;transition:.35s var(--ease)}
+.q .plus svg{width:14px;height:14px}
+.q.open .plus{background:var(--sun);color:var(--ink);border-color:var(--sun);transform:rotate(45deg)}
+.q .a{overflow:hidden;height:0}
+.q .a p{padding:0 0 22px;color:var(--muted);max-width:62ch;line-height:1.65}
+.faq-side{position:sticky;top:110px;align-self:start}
+.faq-side .card{margin-top:24px;background:var(--ink-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:24px}
+.faq-side .card p{color:var(--muted);font-size:.95rem;margin-bottom:16px}
+@media(max-width:900px){.faq-grid{grid-template-columns:1fr}.faq-side{position:static}}
+
+/* news */
+.news-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:44px}
+.post{background:#fff;border:1px solid var(--line-dark);border-radius:var(--r-lg);overflow:hidden;display:grid;grid-template-columns:.9fr 1.1fr;transition:transform .6s var(--ease),box-shadow .6s}
+.post:hover{transform:translateY(-6px);box-shadow:0 34px 60px -34px rgba(11,14,18,.45)}
+.post .img{overflow:hidden;min-height:240px}
+.post img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.post:hover img{transform:scale(1.06)}
+.post .pb{padding:26px;display:flex;flex-direction:column;gap:10px}
+.post h3{font-size:1.25rem;line-height:1.25}
+.post p{color:var(--dark-muted);font-size:.92rem;line-height:1.55;flex:1}
+@media(max-width:1000px){.news-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.post{grid-template-columns:1fr}.post .img{min-height:200px}}
+
+/* cta */
+.cta{overflow:hidden;color:#fff}
+.cta .bgv{position:absolute;inset:0;background:var(--ink)}
+.cta .bgv :is(video,img){width:100%;height:100%;object-fit:cover;opacity:.85}
+.cta .bgv::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(11,14,18,.94) 0%,rgba(11,14,18,.78) 50%,rgba(11,14,18,.55) 100%)}
+.cta .grid{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,90px);align-items:center}
+.cta .h2{color:#fff}
+.contacts{display:grid;gap:14px;margin-top:30px}
+.contacts a,.contacts div{display:flex;gap:14px;align-items:center;font-weight:500}
+.contacts .ci{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid var(--line);display:grid;place-items:center;color:var(--sun);flex:none}
+.contacts .ci svg{width:18px;height:18px}
+.contacts small{display:block;color:var(--muted);font-size:.8rem;font-weight:400}
+.form{background:rgba(255,255,255,.06);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.14);border-radius:var(--r-lg);padding:28px}
+.form h3{font-size:1.4rem;margin-bottom:4px}
+.form .sub{color:var(--muted);font-size:.9rem;margin-bottom:20px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.field label{font-size:.78rem;color:var(--muted);font-weight:600;letter-spacing:.02em}
+.field :is(input,select,textarea){background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:14px;color:#fff;font:inherit;outline:none;transition:.25s;width:100%}
+.field :is(input,select,textarea):focus{border-color:var(--sun);background:rgba(255,255,255,.1)}
+.field select option{color:#000}
+.field textarea{min-height:92px;resize:vertical}
+.form .btn{width:100%;justify-content:center;margin-top:6px}
+.form .ok{display:none;padding:18px;border-radius:14px;background:rgba(255,200,58,.14);border:1px solid rgba(255,200,58,.5);margin-top:12px}
+.form.sent .ok{display:block}
+@media(max-width:900px){.cta .grid{grid-template-columns:1fr}}
+@media(max-width:560px){.row{grid-template-columns:1fr}}
+
+/* footer */
+.footer{background:#07090B;color:rgba(255,255,255,.68);padding:72px 0 0;border-top:1px solid var(--line);position:relative;overflow:hidden}
+.footer .grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.1fr;gap:36px;position:relative}
+.footer h4{color:#fff;font-size:.95rem;margin-bottom:16px}
+.footer a{display:block;padding:5px 0;transition:.25s}
+.footer a:hover{color:var(--sun)}
+.footer p{font-size:.92rem;line-height:1.6;margin-top:14px;max-width:34ch}
+.footer .soc{display:flex;gap:8px;margin-top:20px}
+.footer .soc a{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;padding:0}
+.footer .soc svg{width:18px;height:18px}
+.footer .bottom{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:52px;padding:22px 0;border-top:1px solid var(--line);font-size:.82rem;position:relative}
+.footer .giant{font:800 clamp(5rem,22vw,22rem)/.8 var(--font-d);letter-spacing:-.06em;color:rgba(255,255,255,.035);text-align:center;margin-top:30px;pointer-events:none;user-select:none}
+@media(max-width:900px){.footer .grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.footer .grid{grid-template-columns:1fr}}
+
+/* floating call (mobile) */
+.fab{position:fixed;right:16px;bottom:16px;z-index:40;display:none;width:58px;height:58px;border-radius:50%;background:var(--sun);color:var(--ink);place-items:center;box-shadow:0 14px 30px -10px rgba(255,200,58,.7)}
+.fab svg{width:22px;height:22px}
+@media(max-width:900px){.fab{display:grid}}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .marquee-track{animation:none}
+}
+</style>
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+
+<header class="hdr">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="esolar.lt – pradžia"><img src="assets/esolar/web/logo.webp" alt="" width="42" height="42">esolar<small>.lt</small></a>
+    <nav class="nav" aria-label="Pagrindinis meniu">
+      <a href="#paslaugos">Paslaugos</a>
+      <a href="#parduotuve">Parduotuvė</a>
+      <a href="#darbai">Atlikti darbai</a>
+      <a href="#apie">Apie mus</a>
+      <a href="#duk">DUK</a>
+      <a href="#naujienos">Naujienos</a>
+    </nav>
+    <div class="hdr-right">
+      <a class="phone" href="tel:+37063902730"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>+370 639 02730</a>
+      <a class="icon-btn" href="#parduotuve" aria-label="Krepšelis"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6 5 3H2"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg><b>2</b></a>
+      <a class="btn btn-sun btn-sm" href="#kontaktai" data-magnet>Gauti pasiūlymą</a>
+      <button class="burger" aria-label="Meniu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<div class="menu" aria-hidden="true">
+  <a href="#paslaugos" style="transition-delay:.05s">Paslaugos</a>
+  <a href="#parduotuve" style="transition-delay:.1s">Parduotuvė</a>
+  <a href="#darbai" style="transition-delay:.15s">Atlikti darbai</a>
+  <a href="#apie" style="transition-delay:.2s">Apie mus</a>
+  <a href="#duk" style="transition-delay:.25s">DUK</a>
+  <a href="#kontaktai" style="transition-delay:.3s">Kontaktai</a>
+  <div class="m-foot"><span>+370 639 02730</span><span>info@esolar.lt</span><span>I–V 9:00–18:00</span></div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-media">
+    <video autoplay muted loop playsinline preload="metadata" poster="assets/esolar/web/DJI_0072.jpg" src="https://videos.pexels.com/video-files/4324088/4324088-hd_1920_1080_24fps.mp4"></video>
+  </div>
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Saulės elektrinių ekspertai · Panevėžys · visa Lietuva</span>
+      <h1>
+        <span class="line"><span class="line-in">Saulės elektrinė</span></span>
+        <span class="line"><span class="line-in">be <em>galvos</em></span></span>
+        <span class="line"><span class="line-in">skausmo.</span></span>
+      </h1>
+      <p>Pasirūpiname viskuo – nuo dokumentų iki paskutinio varžto. Jūs tiesiog džiaugiatės mažesnėmis sąskaitomis ir sprendimu, kuris neša naudą kiekvieną dieną.</p>
+      <div class="hero-actions">
+        <a class="btn btn-sun" href="#kontaktai" data-magnet>Gauti pasiūlymą <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost" href="#darbai"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Žiūrėti atliktus darbus</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><b><span data-count="4">0</span><i>+</i></b><span>metai patirties montuojant ir parduodant</span></div>
+      <div class="stat"><b><span data-count="700">0</span><i>+</i></b><span>įgyvendintų objektų visoje Lietuvoje</span></div>
+      <div class="stat"><b><span data-count="10">0</span><i>+</i></b><span>MWp įrengtos galios</span></div>
+    </div>
+    <div class="hero-foot">
+      <div class="chips"><span class="chip-o">Namams</span><span class="chip-o">Verslui</span><span class="chip-o">Ūkiams</span><span class="chip-o">APVA parama</span></div>
+      <a class="badge" href="#paslaugos" aria-label="Slinkti žemyn">
+        <svg viewBox="0 0 100 100"><defs><path id="circ" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs><text><textPath href="#circ">saulės energija · esolar · nuo 2021 · </textPath></text></svg>
+        <span class="arrow"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Iki 85 % mažesnės sąskaitos už elektrą</span><span>APVA parama iki 255 €/kW</span><span>Atsiperka per 3–4 metus</span><span>Montavimas per 1–2 dienas</span><span>700+ įgyvendintų objektų</span><span>Pridavimas ESO – mūsų rūpestis</span>
+    <span>Iki 85 % mažesnės sąskaitos už elektrą</span><span>APVA parama iki 255 €/kW</span><span>Atsiperka per 3–4 metus</span><span>Montavimas per 1–2 dienas</span><span>700+ įgyvendintų objektų</span><span>Pridavimas ESO – mūsų rūpestis</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="s-dark sec services" id="paslaugos">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <div>
+        <span class="eyebrow">01 — Paslaugos</span>
+        <h2 class="h2">Viskas, ko reikia jūsų saulės elektrinei</h2>
+        <p class="lead">Nuo pirmos konsultacijos iki pilnai veikiančios sistemos. Dirbame greitai, atsakingai ir taip, kad viskas būtų aišku nuo pat pradžių.</p>
+      </div>
+      <a class="btn btn-ghost" href="#kontaktai">Nemokama konsultacija</a>
+    </div>
+    <div class="svc-grid" data-stagger>
+      <div class="rail" aria-hidden="true"><i></i></div>
+      <article class="svc">
+        <div class="media"><video muted loop playsinline preload="none" poster="https://images.pexels.com/photos/9875418/pexels-photo-9875418.jpeg?auto=compress&cs=tinysrgb&w=800" data-src="https://videos.pexels.com/video-files/8853459/8853459-hd_1280_720_24fps.mp4"></video><span class="num">01</span></div>
+        <div class="body"><h3>Konsultavimas ir objekto įvertinimas</h3><p>Įvertiname objektą, apskaičiuojame atsiperkamumą ir pasiūlome sprendimą, kuris tikrai veikia. Iš karto aišku, ar verta investuoti – be miglos ar spaudimo.</p><a class="link" href="#kontaktai">Susisiekti <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="svc">
+        <div class="media"><video muted loop playsinline preload="none" data-src="https://videos.pexels.com/video-files/6546062/6546062-hd_1280_720_30fps.mp4"></video><span class="num">02</span></div>
+        <div class="body"><h3>Dokumentai: APVA ir ESO</h3><p>Biurokratiją palikite mums – nuo A iki Z viskuo pasirūpiname už jus. Su APVA ir ESO dirbame nuolat, todėl viską padarome greitai, be grąžinimų ar taisymų.</p><a class="link" href="#kontaktai">Susisiekti <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="svc">
+        <div class="media"><img src="https://images.pexels.com/photos/27873610/pexels-photo-27873610.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Saulės moduliai" loading="lazy"><span class="num">03</span></div>
+        <div class="body"><h3>Įrangos parinkimas ir pardavimas</h3><p>Dirbame tik su patikimais tiekėjais – siūlome įrangą, kuri tarnauja ilgai ir veikia stabiliai. Renkamės ne pagal kainą, o pagal tai, kas geriausiai tinka jūsų situacijai.</p><a class="link" href="#parduotuve">Į parduotuvę <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="svc">
+        <div class="media"><video muted loop playsinline preload="none" poster="https://images.pexels.com/photos/30285845/pexels-photo-30285845.jpeg?auto=compress&cs=tinysrgb&w=800" data-src="https://videos.pexels.com/video-files/8853483/8853483-hd_1280_720_24fps.mp4"></video><span class="num">04</span></div>
+        <div class="body"><h3>Montavimas ir pridavimas ESO</h3><p>Montuojame profesionaliai, laikomės terminų ir garantuojame rezultatą. Užbaigę darbus sutvarkome dokumentus ir elektrinę prijungiame prie ESO be papildomų rūpesčių.</p><a class="link" href="#kontaktai">Susisiekti <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="svc">
+        <div class="media"><img src="https://images.pexels.com/photos/39057093/pexels-photo-39057093.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Elektrikas prie inverterio" loading="lazy"><span class="num">05</span></div>
+        <div class="body"><h3>Elektros galios didinimas</h3><p>Kai reikia daugiau elektros galios – padedame visame procese: greitai paruošiame dokumentus, koordinuojame su ESO ir sutvarkome viską nuo pradžios iki pabaigos.</p><a class="link" href="#kontaktai">Susisiekti <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="s-paper sec" id="kodel">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <div>
+        <span class="eyebrow">02 — Kodėl verta</span>
+        <h2 class="h2">Sumažinkite sąskaitas, tapkite nepriklausomi</h2>
+        <p class="lead">Saulės elektrinė – ne mada, o protinga ilgalaikė investicija. Tinkamai parinkta ir sumontuota sistema sąskaitas mažina jau nuo pirmo mėnesio.</p>
+      </div>
+    </div>
+    <div class="bento" data-stagger>
+      <div class="tile t-video">
+        <video muted loop playsinline preload="none" poster="assets/esolar/web/12.jpg" data-src="https://videos.pexels.com/video-files/15046856/15046856-hd_1366_720_24fps.mp4"></video>
+        <div class="inner"><h3>Energetinė nepriklausomybė</h3><p>Turint saulės elektrinę tampate mažiau priklausomi nuo elektros kainų šuolių ar tiekimo sutrikimų. Stabilumas ir kontrolė – jūsų rankose.</p></div>
+      </div>
+      <div class="tile t-sun">
+        <div class="big"><span data-count="85">0</span><small> %</small></div>
+        <h3>mažesnės elektros išlaidos – kas mėnesį</h3>
+        <p style="color:rgba(11,14,18,.7)">1 kW galios elektrinė per metus pagamina apie 1 000 kWh. Su ESO „pasaugojimo“ planu mokėsite tik 4,79 €/mėn., o atsiskaitant pagaminta elektra sąskaitos gali išnykti visai.</p>
+      </div>
+      <div class="tile t-ring">
+        <div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#E4DED0" stroke-width="10"/><circle class="ring-fg" cx="60" cy="60" r="52" fill="none" stroke="#FFC83A" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7"/></svg><b>3–4 m.</b></div>
+        <div><h3>Investicija, kuri atsiperka</h3><p>Pasinaudojus APVA parama elektrinė dažniausiai atsiperka per 3–4 metus. Po to – tik pelnas ir mažesnės išlaidos dešimtmečiais į priekį.</p></div>
+      </div>
+      <div class="tile t-s"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div><h3>Atsinaujinantis šaltinis</h3><p>Neišsenkantis, ekologiškas šaltinis – elektra be jokios taršos. Kuo daugiau pasigaminate patys, tuo mažiau priklausote nuo iškastinio kuro.</p></div>
+      <div class="tile t-s"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z"/></svg></div><h3>Mažos eksploatacijos išlaidos</h3><p>Saulės jėgainės beveik nereikalauja priežiūros. Kartą įsirengus, elektra praktiškai gaminasi pati be papildomų sąnaudų.</p></div>
+      <div class="tile t-s"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></div><h3>Mažesnė elektros savikaina</h3><p>Pasigaminta elektra yra žymiai pigesnė nei perkama iš tinklo – tiek gyventojams, tiek verslui.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="s-dark sec calc" id="skaiciuokle">
+  <div class="rays" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="grid">
+      <div data-reveal>
+        <span class="eyebrow">03 — Skaičiuoklė</span>
+        <h2 class="h2">Kiek sutaupytumėte su savo stogu?</h2>
+        <p class="lead">Pastumkite slankiklį pagal metinį elektros suvartojimą – iš karto matysite rekomenduojamą galią, reikalingą plotą ir orientacinę naudą.</p>
+        <div class="ctl">
+          <label for="kwh">Metinis suvartojimas <output id="kwhOut">5 000 kWh</output></label>
+          <input type="range" id="kwh" min="1500" max="40000" step="500" value="5000">
+          <div class="hint"><span>1 500 kWh</span><span>Butas · Namas · Ūkis · Verslas</span><span>40 000 kWh</span></div>
+          <div class="seg" role="group" aria-label="Objekto tipas"><button class="on" data-type="roof">Ant stogo</button><button data-type="ground">Ant žemės</button></div>
+        </div>
+        <p class="fine">* Skaičiavimai orientaciniai: 1 kW ≈ 1 000 kWh per metus, 6–7 m² vienam kW, vidutinė elektros kaina ~0,24 €/kWh. Tikslų pasiūlymą paruošiame po objekto įvertinimo.</p>
+      </div>
+      <div data-reveal>
+        <div class="results">
+          <div class="res"><b><span id="rKw">5</span><i>kW</i></b><span>rekomenduojama elektrinės galia</span></div>
+          <div class="res"><b><span id="rArea">33</span><i>m²</i></b><span id="rAreaLbl">reikalingas stogo plotas</span></div>
+          <div class="res"><b><span id="rGen">5 000</span><i>kWh</i></b><span>pagaminama per metus</span></div>
+          <div class="res"><b><span id="rCo2">1,3</span><i>t</i></b><span>CO₂ mažiau per metus</span></div>
+          <div class="res hi"><b><span id="rSave">1 200</span><i>€ / metus</i></b><span>orientacinis sutaupymas · atsipirkimas su APVA parama ~3–4 m.</span></div>
+        </div>
+        <div class="panels" id="panels" aria-hidden="true"></div>
+        <p class="panels-note"><span id="rPanels">12</span> moduliai po 440 W</p>
+        <a class="btn btn-sun" href="#kontaktai" style="margin-top:22px" data-magnet>Gauti tikslų pasiūlymą <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOP -->
+<section class="s-paper sec" id="parduotuve">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <div>
+        <span class="eyebrow">04 — Parduotuvė</span>
+        <h2 class="h2">Įranga, kuria pasitikime patys</h2>
+        <p class="lead">Moduliai, inverteriai, kaupikliai ir įkrovimo stotelės iš patikrintų tiekėjų. Užsisakykite internetu arba paprašykite pasiūlymo su montavimu.</p>
+      </div>
+      <div class="shop-nav"><button id="shopPrev" aria-label="Atgal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><button id="shopNext" aria-label="Pirmyn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+    </div>
+    <div class="shop-track" id="shopTrack">
+      <article class="prod">
+        <div class="img"><img src="https://images.pexels.com/photos/12606669/pexels-photo-12606669.jpeg?auto=compress&cs=tinysrgb&w=700" alt="" loading="lazy"><span class="tag sun">Populiariausia</span></div>
+        <div class="pb"><span class="chip">Komplektai</span><h3>Saulės elektrinė 10 kW namams</h3><p class="specs">23 moduliai · hibridinis inverteris · montavimas ir pridavimas ESO</p>
+        <div class="price-row"><div class="price"><small>kaina nuo</small>7 990 €</div><span class="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></div></div>
+      </article>
+      <article class="prod">
+        <div class="img"><img src="https://images.pexels.com/photos/8853509/pexels-photo-8853509.jpeg?auto=compress&cs=tinysrgb&w=700" alt="" loading="lazy"></div>
+        <div class="pb"><span class="chip">Moduliai</span><h3>Monokristalinis modulis 440 W</h3><p class="specs">N-type TOPCon · juodas rėmas · 25 m. gamintojo garantija</p>
+        <div class="price-row"><div class="price"><small>kaina nuo</small>89 €</div><span class="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></div></div>
+      </article>
+      <article class="prod">
+        <div class="img"><img src="https://images.pexels.com/photos/39057093/pexels-photo-39057093.jpeg?auto=compress&cs=tinysrgb&w=700" alt="" loading="lazy"><span class="tag">Naujiena</span></div>
+        <div class="pb"><span class="chip">Inverteriai</span><h3>Hibridinis inverteris 10 kW</h3><p class="specs">3 fazės · 2 MPPT · paruoštas baterijai · programėlė telefone</p>
+        <div class="price-row"><div class="price"><small>kaina nuo</small>1 490 €</div><span class="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></div></div>
+      </article>
+      <article class="prod">
+        <div class="img"><img src="https://images.pexels.com/photos/37929911/pexels-photo-37929911.jpeg?auto=compress&cs=tinysrgb&w=700" alt="" loading="lazy"></div>
+        <div class="pb"><span class="chip">Kaupikliai</span><h3>Energijos kaupiklis 10 kWh</h3><p class="specs">LiFePO₄ · modulinis, plečiamas · 10 m. garantija</p>
+        <div class="price-row"><div class="price"><small>kaina nuo</small>3 290 €</div><span class="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></div></div>
+      </article>
+      <article class="prod">
+        <div class="img"><img src="https://images.pexels.com/photos/5391509/pexels-photo-5391509.jpeg?auto=compress&cs=tinysrgb&w=700" alt="" loading="lazy"></div>
+        <div class="pb"><span class="chip">Įkrovimas</span><h3>EV įkrovimo stotelė 11 kW</h3><p class="specs">Wi-Fi · dinaminis galios balansavimas · krauna iš saulės pertekliaus</p>
+        <div class="price-row"><div class="price"><small>kaina nuo</small>690 €</div><span class="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></div></div>
+      </article>
+      <article class="prod">
+        <div class="img"><img src="https://images.pexels.com/photos/16427010/pexels-photo-16427010.jpeg?auto=compress&cs=tinysrgb&w=700" alt="" loading="lazy"></div>
+        <div class="pb"><span class="chip">Komplektai</span><h3>Saulės elektrinė 5 kW</h3><p class="specs">12 modulių · inverteris · montavimas ir pridavimas ESO</p>
+        <div class="price-row"><div class="price"><small>kaina nuo</small>4 690 €</div><span class="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></div></div>
+      </article>
+    </div>
+    <p class="demo-note">Demo prekės – kainos ir specifikacijos orientacinės, bus pakeistos tikrais WooCommerce produktais.</p>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section class="s-dark works" id="darbai">
+  <div class="works-inner">
+    <div class="wrap sec-head" data-reveal>
+      <div>
+        <span class="eyebrow">05 — Atlikti darbai</span>
+        <h2 class="h2">Nuo namų iki ūkių ir gamybos</h2>
+        <p class="lead">Nuo mažesnių sprendimų individualiems namams iki didesnių sistemų verslui. Kiekvieną kartą siekiame, kad rezultatas būtų ne tik techniškai tvarkingas, bet ir ilgalaikis.</p>
+      </div>
+      <span class="chip-o" style="display:none">Slinkite →</span>
+    </div>
+    <div class="works-track">
+      <figure class="work"><img src="assets/esolar/web/12.jpg" alt="Saulės elektrinė ant gyvenamojo namo stogo" loading="lazy"><figcaption><span class="tag sun">Gyvenamasis namas</span><span class="tag">Stogas</span></figcaption></figure>
+      <figure class="work"><video muted loop playsinline preload="none" data-src="https://videos.pexels.com/video-files/9790190/9790190-hd_1280_720_30fps.mp4"></video><figcaption><span class="tag sun">Verslui</span><span class="tag">Plokščias stogas</span></figcaption></figure>
+      <figure class="work"><img src="assets/esolar/web/5.jpg" alt="Saulės elektrinė ant ūkio pastato" loading="lazy"><figcaption><span class="tag sun">Ūkis</span><span class="tag">Šlaitinis stogas</span></figcaption></figure>
+      <figure class="work"><img src="assets/esolar/web/DJI_0282.jpg" alt="Antžeminė saulės elektrinė" loading="lazy"><figcaption><span class="tag sun">Antžeminė</span><span class="tag">Žemės sklypas</span></figcaption></figure>
+      <figure class="work"><img src="assets/esolar/web/13.jpg" alt="Modernus namas su saulės elektrine" loading="lazy"><figcaption><span class="tag sun">Gyvenamasis namas</span><span class="tag">Plokščias stogas</span></figcaption></figure>
+      <figure class="work"><img src="assets/esolar/web/DJI_0093.jpg" alt="Saulės elektrinė ant gamybinio pastato" loading="lazy"><figcaption><span class="tag sun">Gamyba</span><span class="tag">Pramoninis stogas</span></figcaption></figure>
+      <figure class="work"><img src="assets/esolar/web/DJI_0072.jpg" alt="Saulės elektrinė ant ūkio pastatų" loading="lazy"><figcaption><span class="tag sun">Ūkis</span><span class="tag">Keli pastatai</span></figcaption></figure>
+      <div class="work cta-card"><div><h3>700+ objektų – jūsų gali būti kitas</h3><a class="btn btn-ink" href="#kontaktai">Gauti pasiūlymą <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="s-paper sec about" id="apie">
+  <div class="wrap">
+    <div class="grid">
+      <div class="about-media" data-reveal>
+        <div class="main"><img src="assets/esolar/web/apie-mus.jpg" alt="Saulės moduliai" data-parallax></div>
+        <div class="float"><video muted loop playsinline preload="none" data-src="https://videos.pexels.com/video-files/8853486/8853486-hd_720_1280_24fps.mp4"></video><span class="lbl">Montavimas</span></div>
+      </div>
+      <div data-reveal>
+        <span class="eyebrow">06 — Apie mus</span>
+        <h2 class="h2">Darome taip, kad klientas mus rekomenduotų</h2>
+        <p class="lead">„Esolar“ specializacija – saulės elektrinės ir jų įrengimas. Komandos ilgametė patirtis leidžia visus projektus įgyvendinti sklandžiai ir užtikrinti klientui nepriekaištingą rezultatą.</p>
+        <div class="vals">
+          <div class="val"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><div><b>Misija</b><p>Padėti kiekvienam klientui sutaupyti ir prisidėti prie tvaresnio gyvenimo būdo pasitelkiant atsinaujinančią energiją.</p></div></div>
+          <div class="val"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><div><b>Vizija</b><p>Būti pirmu pasirinkimu savo klientams.</p></div></div>
+        </div>
+        <div class="stats">
+          <div class="stat"><b><span data-count="4">0</span><i>+</i></b><span>metai patirties</span></div>
+          <div class="stat"><b><span data-count="700">0</span><i>+</i></b><span>objektų</span></div>
+          <div class="stat"><b><span data-count="10">0</span><i>+</i></b><span>MWp galios</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="s-dark sec" id="duk">
+  <div class="wrap">
+    <div class="faq-grid">
+      <div class="faq-side" data-reveal>
+        <span class="eyebrow">07 — DUK</span>
+        <h2 class="h2">Dažniausiai užduodami klausimai</h2>
+        <div class="card"><p>Neradote atsakymo? Paskambinkite – pakonsultuosime nemokamai ir be įsipareigojimų.</p><a class="btn btn-sun btn-sm" href="tel:+37063902730">+370 639 02730</a></div>
+      </div>
+      <div class="faq" data-reveal>
+        <div class="q open"><button aria-expanded="true">Ar galima gauti valstybės paramą?<span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></button><div class="a"><p>Taip, Aplinkos projektų valdymo agentūra (APVA) periodiškai skelbia kvietimus kompensacijoms. Parama gali siekti iki 255 €/kW.</p></div></div>
+        <div class="q"><button aria-expanded="false">Kokią galią turėčiau pasirinkti?<span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></button><div class="a"><p>Galia priklauso nuo jūsų elektros suvartojimo. Apytiksliai 1 kW saulės elektrinės per metus pagamina apie 1 000 kWh. Jei per metus sunaudojate 5 000 kWh – verta rinktis 5 kW sistemą.</p></div></div>
+        <div class="q"><button aria-expanded="false">Kiek vietos reikia saulės elektrinei?<span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></button><div class="a"><p>Apie 6–7 m² ploto vienam kW. Vadinasi, 5 kW sistemai reikia maždaug 30–35 m² stogo ar žemės ploto.</p></div></div>
+        <div class="q"><button aria-expanded="false">Ką daryti žiemą, kai mažai saulės?<span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></button><div class="a"><p>Žiemą gamyba sumažėja, bet vasarą pagamintas perteklius „sukaupiamas“ ESO tinkle, tad jį galima atsiimti vėliau.</p></div></div>
+        <div class="q"><button aria-expanded="false">Kiek trunka montavimas?<span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></button><div class="a"><p>Patys montavimo darbai dažniausiai trunka 1–2 dienas. Su dokumentacija ir prisijungimu prie ESO – apie 2–4 savaitės.</p></div></div>
+        <div class="q"><button aria-expanded="false">Ar reikalingas leidimas?<span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></button><div class="a"><p>Iki 30 kW dažniausiai užtenka tik pranešimo ESO. Specialūs leidimai reikalingi tik montuojant ant kultūros paveldo objektų ar draustiniuose.</p></div></div>
+        <div class="q"><button aria-expanded="false">Kiek laiko tarnauja saulės elektrinė?<span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></button><div class="a"><p>Moduliai tarnauja 25–30 metų, inverteris – apie 10–15 metų. Po to užtenka pakeisti tik inverterį.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section class="s-paper sec" id="naujienos">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <div>
+        <span class="eyebrow">08 — Naujienos</span>
+        <h2 class="h2">Naudinga žinoti</h2>
+      </div>
+      <a class="link" href="#naujienos">Visi straipsniai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <div class="news-grid" data-stagger>
+      <article class="post">
+        <div class="img"><img src="https://images.pexels.com/photos/12243093/pexels-photo-12243093.jpeg?auto=compress&cs=tinysrgb&w=800" alt="" loading="lazy"></div>
+        <div class="pb"><span class="chip">Straipsnis</span><h3>Saulės baterijos: atsinaujinančiosios energijos ateitis</h3><p>Saulės baterijos – tai įrenginiai, kurie paverčia saulės energiją į elektrinę. Papasakosime, kaip veikia fotovoltinis procesas ir kur jis pritaikomas.</p><a class="link" href="https://esolar.lt/saules-baterijos-atsinaujinanciosios-energijos-ateitis/">Skaityti <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="post">
+        <div class="img"><img src="https://images.pexels.com/photos/16427010/pexels-photo-16427010.jpeg?auto=compress&cs=tinysrgb&w=800" alt="" loading="lazy"></div>
+        <div class="pb"><span class="chip">Patarimai</span><h3>Pagal ką rinktis saulės baterijas?</h3><p>Efektyvumas, garantija, gamintojas ir tinkamumas jūsų stogui – svarbiausi kriterijai, į kuriuos verta atsižvelgti prieš perkant.</p><a class="link" href="https://esolar.lt/pagal-ka-rinktis-saules-baterijas/">Skaityti <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / CONTACT -->
+<section class="sec cta" id="kontaktai">
+  <div class="bgv"><video muted loop playsinline preload="none" poster="assets/esolar/web/DJI_0299.jpg" data-src="https://videos.pexels.com/video-files/14067718/14067718-hd_1280_720_30fps.mp4"></video></div>
+  <div class="wrap">
+    <div class="grid">
+      <div data-reveal>
+        <span class="eyebrow">09 — Kontaktai</span>
+        <h2 class="h2">Ieškote sprendimo, kuris tikrai atsiperka?</h2>
+        <p class="lead">Su mumis viskas aišku nuo pradžių: be miglos, be spaudimo – tik konkretūs skaičiai, aiškūs atsakymai ir sprendimas, kuris veikia.</p>
+        <div class="contacts">
+          <a href="tel:+37063902730"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span><span>+370 639 02730<small>I–V 9:00–18:00</small></span></a>
+          <a href="mailto:info@esolar.lt"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span>info@esolar.lt<small>Atsakome per 1 darbo dieną</small></span></a>
+          <div><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span><span>Zigmo g. 22, Vyčių k., LT-38122 Panevėžio r.<small>Dirbame visoje Lietuvoje</small></span></div>
+        </div>
+      </div>
+      <form class="form" id="form" data-reveal novalidate>
+        <h3>Gaukite pasiūlymą</h3>
+        <p class="sub">Užpildykite formą – įvertinsime objektą ir paruošime konkretų pasiūlymą su skaičiais.</p>
+        <div class="row">
+          <div class="field"><label for="f1">Vardas *</label><input id="f1" required placeholder="Jūsų vardas"></div>
+          <div class="field"><label for="f2">Telefonas *</label><input id="f2" type="tel" required placeholder="+370"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="f3">El. paštas *</label><input id="f3" type="email" required placeholder="vardas@pastas.lt"></div>
+          <div class="field"><label for="f4">Miestas</label><input id="f4" placeholder="Panevėžys"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="f5">Planuojama galia</label><select id="f5"><option>Nežinau – patarkite</option><option>iki 5 kW</option><option>5–10 kW</option><option>10–30 kW</option><option>30 kW ir daugiau</option></select></div>
+          <div class="field"><label for="f6">Kur bus statoma?</label><select id="f6"><option>Ant stogo</option><option>Ant žemės</option><option>Dar nežinau</option></select></div>
+        </div>
+        <div class="field"><label for="f7">Papildoma informacija</label><textarea id="f7" placeholder="Metinis suvartojimas, stogo tipas, terminai…"></textarea></div>
+        <button class="btn btn-sun" type="submit" data-magnet>Siųsti užklausą <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <div class="ok">Ačiū! Užklausa gauta – susisieksime per 1 darbo dieną.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="grid">
+      <div>
+        <a class="brand" href="#top"><img src="assets/esolar/web/logo.webp" alt="" width="42" height="42">esolar<small>.lt</small></a>
+        <p>Saulės elektrinių ekspertai. Projektuojame, montuojame ir priduodame ESO – nuo namų iki pramonės.</p>
+        <div class="soc">
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.8c0-.9.3-1.6 1.6-1.6h1.7V4.4c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.3H7.4V14h2.8v8h3.3z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 8.2a2.8 2.8 0 0 0-2-2C18.3 6 12 6 12 6s-6.3 0-8 .2a2.8 2.8 0 0 0-2 2A29 29 0 0 0 1.7 12 29 29 0 0 0 2 15.8a2.8 2.8 0 0 0 2 2c1.7.2 8 .2 8 .2s6.3 0 8-.2a2.8 2.8 0 0 0 2-2 29 29 0 0 0 .3-3.8 29 29 0 0 0-.3-3.8zM10 14.6V9.4l5 2.6-5 2.6z"/></svg></a>
+        </div>
+      </div>
+      <div><h4>Informacija</h4><a href="#top">Pagrindinis</a><a href="#paslaugos">Paslaugos</a><a href="#parduotuve">Parduotuvė</a><a href="#darbai">Atlikti darbai</a><a href="#apie">Apie mus</a><a href="#naujienos">Naujienos</a><a href="#kontaktai">Kontaktai</a></div>
+      <div><h4>Parduotuvė</h4><a href="#parduotuve">Komplektai</a><a href="#parduotuve">Saulės moduliai</a><a href="#parduotuve">Inverteriai</a><a href="#parduotuve">Kaupikliai</a><a href="#parduotuve">EV įkrovimas</a><a href="#parduotuve">Priedai</a></div>
+      <div><h4>Rekvizitai</h4><span style="display:block;padding:5px 0">Esolar, MB</span><span style="display:block;padding:5px 0">Įmonės kodas: 306116527</span><span style="display:block;padding:5px 0">PVM kodas: LT100015188913</span><span style="display:block;padding:5px 0">Zigmo g. 22, Vyčių k., LT-38122 Panevėžio r.</span><a href="tel:+37063902730">+370 639 02730</a><a href="mailto:info@esolar.lt">info@esolar.lt</a></div>
+    </div>
+    <div class="giant" aria-hidden="true">esolar</div>
+    <div class="bottom"><span>© 2026 Esolar, MB. Visos teisės saugomos.</span><span>Privatumo politika · Pirkimo taisyklės</span></div>
+  </div>
+</footer>
+
+<a class="fab" href="tel:+37063902730" aria-label="Skambinti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+(() => {
+  const $ = (s, c = document) => c.querySelector(s);
+  const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = matchMedia('(pointer: fine)').matches;
+  const fmt = n => new Intl.NumberFormat('lt-LT').format(n);
+
+  /* header + progress */
+  const hdr = $('.hdr'), prog = $('.progress');
+  const onScroll = () => {
+    hdr.classList.toggle('is-scrolled', scrollY > 40);
+    prog.style.transform = `scaleX(${Math.min(1, scrollY / (document.documentElement.scrollHeight - innerHeight))})`;
+  };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  /* mobile menu */
+  const burger = $('.burger');
+  burger.addEventListener('click', () => {
+    const open = document.body.classList.toggle('menu-open');
+    burger.setAttribute('aria-expanded', open);
+    $('.menu').setAttribute('aria-hidden', !open);
+  });
+  $$('.menu a').forEach(a => a.addEventListener('click', () => document.body.classList.remove('menu-open')));
+
+  /* lazy videos: play only in view */
+  const vids = $$('video[data-src]');
+  if (reduce) {
+    $('.hero-media video')?.pause();
+  } else {
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      const v = e.target;
+      if (e.isIntersecting) { if (!v.getAttribute('src')) { v.src = v.dataset.src; } v.play().catch(() => {}); }
+      else v.pause();
+    }), { rootMargin: '200px 0px' });
+    vids.forEach(v => io.observe(v));
+  }
+
+  /* GSAP */
+  if (!window.gsap) return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  let lenis = null;
+  if (!reduce && window.Lenis) {
+    lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+  }
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+    const id = a.getAttribute('href'); if (id.length < 2) return;
+    const t = $(id); if (!t) return; e.preventDefault();
+    document.body.classList.remove('menu-open');
+    if (lenis) lenis.scrollTo(t, { offset: -70, duration: 1.4 }); else t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+  }));
+
+  /* hero intro */
+  const intro = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  intro.from('.hdr', { y: -24, opacity: 0, duration: .9 }, .1)
+       .from('.hero .eyebrow', { opacity: 0, y: 12, duration: .7 }, .25)
+       .from('.hero .line-in', { yPercent: 115, duration: 1.15, stagger: .11 }, .3)
+       .from('.hero p, .hero-actions', { opacity: 0, y: 24, duration: .9, stagger: .12 }, .95)
+       .from('.hero-stats', { opacity: 0, y: 34, duration: 1 }, 1.05)
+       .from('.hero-foot', { opacity: 0, duration: 1 }, 1.3);
+  if (reduce) intro.progress(1);
+
+  /* reveals */
+  $$('[data-reveal]').forEach(el => gsap.from(el, { opacity: 0, y: 40, duration: 1.05, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } }));
+  $$('[data-stagger]').forEach(g => gsap.from([...g.children].filter(c => !c.classList.contains('rail')), { opacity: 0, y: 44, duration: .95, stagger: .09, ease: 'power3.out', scrollTrigger: { trigger: g, start: 'top 85%', once: true } }));
+
+  /* counters */
+  $$('[data-count]').forEach(el => {
+    const end = +el.dataset.count, o = { v: 0 };
+    gsap.to(o, { v: end, duration: 2.2, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 92%', once: true }, onUpdate: () => el.textContent = fmt(Math.round(o.v)) });
+  });
+
+  /* services rail */
+  gsap.to('.rail i', { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '.svc-grid', start: 'top 85%', end: 'bottom 55%', scrub: 1 } });
+
+  /* parallax */
+  $$('[data-parallax]').forEach(el => gsap.fromTo(el, { yPercent: -9 }, { yPercent: 9, ease: 'none', scrollTrigger: { trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }));
+
+  /* ring */
+  gsap.to('.ring-fg', { strokeDashoffset: 326.7 * (1 - .78), duration: 1.8, ease: 'power3.out', scrollTrigger: { trigger: '.t-ring', start: 'top 85%', once: true } });
+
+  /* works – horizontal scroll (desktop) */
+  const mm = gsap.matchMedia();
+  mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
+    const track = $('.works-track');
+    const dist = () => track.scrollWidth - innerWidth;
+    gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: '.works', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 1, invalidateOnRefresh: true, anticipatePin: 1 } });
+  });
+
+  /* magnetic buttons */
+  if (fine && !reduce) $$('[data-magnet]').forEach(b => {
+    b.addEventListener('mousemove', e => { const r = b.getBoundingClientRect(); gsap.to(b, { x: (e.clientX - r.left - r.width / 2) * .22, y: (e.clientY - r.top - r.height / 2) * .3, duration: .4 }); });
+    b.addEventListener('mouseleave', () => gsap.to(b, { x: 0, y: 0, duration: .6, ease: 'elastic.out(1,.5)' }));
+  });
+
+  /* calculator */
+  const range = $('#kwh'), panels = $('#panels');
+  let type = 'roof', lastPanels = 0;
+  const setNum = (id, v) => { const el = $(id); const t = String(v); if (el.textContent !== t) { el.textContent = t; const r = el.closest('.res'); if (r) { r.classList.add('flash'); setTimeout(() => r.classList.remove('flash'), 350); } } };
+  const calc = () => {
+    const kwh = +range.value;
+    range.style.setProperty('--p', ((kwh - range.min) / (range.max - range.min) * 100) + '%');
+    $('#kwhOut').textContent = fmt(kwh) + ' kWh';
+    const kw = Math.max(1, Math.round(kwh / 1000 * 2) / 2);
+    const m2 = Math.round(kw * (type === 'roof' ? 6.5 : 9));
+    const gen = Math.round(kw * 1000);
+    const save = Math.round(Math.min(gen, kwh) * 0.24 / 10) * 10;
+    const co2 = (gen * 0.25 / 1000).toFixed(1).replace('.', ',');
+    const n = Math.ceil(kw * 1000 / 440);
+    setNum('#rKw', fmt(kw).replace('.', ',')); setNum('#rArea', fmt(m2)); setNum('#rGen', fmt(gen)); setNum('#rCo2', co2); setNum('#rSave', fmt(save)); $('#rPanels').textContent = n;
+    $('#rAreaLbl').textContent = type === 'roof' ? 'reikalingas stogo plotas' : 'reikalingas žemės plotas';
+    const shown = Math.min(n, 96);
+    if (shown !== lastPanels) {
+      panels.innerHTML = '';
+      for (let i = 0; i < shown; i++) { const s = document.createElement('i'); s.style.animationDelay = (i * 8) + 'ms'; panels.appendChild(s); }
+      lastPanels = shown;
+    }
+  };
+  range.addEventListener('input', calc);
+  $$('.seg button').forEach(b => b.addEventListener('click', () => { $$('.seg button').forEach(x => x.classList.remove('on')); b.classList.add('on'); type = b.dataset.type; calc(); }));
+  calc();
+
+  /* shop carousel */
+  const track = $('#shopTrack');
+  const step = () => (track.querySelector('.prod').offsetWidth + 16) * 2;
+  $('#shopNext').addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+  $('#shopPrev').addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+  let down = false, sx = 0, sl = 0;
+  track.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; down = true; sx = e.clientX; sl = track.scrollLeft; track.classList.add('drag'); });
+  addEventListener('pointermove', e => { if (!down) return; track.scrollLeft = sl - (e.clientX - sx); });
+  addEventListener('pointerup', () => { down = false; track.classList.remove('drag'); });
+
+  /* FAQ */
+  $$('.q').forEach(q => {
+    const btn = $('button', q), a = $('.a', q);
+    if (q.classList.contains('open')) gsap.set(a, { height: 'auto' });
+    btn.addEventListener('click', () => {
+      const open = q.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open);
+      gsap.to(a, { height: open ? 'auto' : 0, duration: .5, ease: 'power3.inOut', onComplete: () => ScrollTrigger.refresh() });
+    });
+  });
+
+  /* form */
+  $('#form').addEventListener('submit', e => {
+    e.preventDefault();
+    const f = e.currentTarget;
+    if (!f.checkValidity()) { f.reportValidity(); return; }
+    f.classList.add('sent'); f.querySelector('button[type=submit]').textContent = 'Išsiųsta ✓';
+  });
+
+  addEventListener('load', () => ScrollTrigger.refresh());
+})();
+</script>
+</body>
+</html>
